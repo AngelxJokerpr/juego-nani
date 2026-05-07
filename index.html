@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>7 Meses de Amor 💖</title>
-<style>
-body, html {margin:0; padding:0; overflow:hidden; font-family:sans-serif;}
-#intro {text-align:center; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background: linear-gradient(to right, #f06, #f9c); color:white;}
-#intro button {padding:20px 50px; font-size:24px; border-radius:15px; cursor:pointer; background: #ff69b4; border:none; color:white; transition: all 0.3s;}
-#intro button:hover {transform: scale(1.1); background:#ff1493;}
-canvas {display:block;}
-#storyText {position:absolute; top:20px; width:100%; text-align:center; color:white; font-size:24px; text-shadow:2px 2px 5px black;}
-#dialog {position:absolute; bottom:100px; width:100%; text-align:center; color:yellow; font-size:22px; text-shadow:2px 2px 5px black;}
-</style>
+  <meta charset="UTF-8">
+  <title>7 Meses de Amor 💖</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Pantalla de inicio -->
+  <div id="intro">
+    <h1>Creé esto para ti porque te amo 💖</h1>
+    <p>¡Vamos a revivir nuestros viajes y momentos juntos!</p>
+    <button id="startBtn">COMENZAR</button>
+  </div>
 
-<div id="intro">
-  <h1>¡Feliz 7 meses, Jonayliz! 💖</h1>
-  <p>Creé esto para ti porque te amo ❤️</p>
-  <button id="startBtn" disabled>COMENZAR</button>
-</div>
+  <!-- Mensaje de historia -->
+  <div id="storyText"></div>
 
-<canvas id="game"></canvas>
-<div id="storyText"></div>
-<div id="dialog"></div>
+  <!-- Canvas del juego -->
+  <canvas id="game"></canvas>
 
-<script src="app_cine.js"></script>
+  <!-- Mensaje de NPC -->
+  <div id="dialog"></div>
+
+  <!-- Pantalla final -->
+  <div id="endScreen">
+    <div id="loveLetter"></div>
+    <button id="marryBtn">¿Quieres casarte conmigo? 💍</button>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
