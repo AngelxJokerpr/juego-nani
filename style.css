@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+  background: #fdf6e3;
+}
+
+#intro {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#startBtn {
+  padding: 20px 40px;
+  font-size: 24px;
+  cursor: pointer;
+  margin-top: 20px;
+  border: none;
+  border-radius: 15px;
+  background: #ff6f91;
+  color: white;
+}
+
+#storyText {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  color: #fff;
+  text-shadow: 2px 2px 5px #000;
+  z-index: 5;
+}
+
+#dialog {
+  position: absolute;
+  bottom: 100px;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  color: yellow;
+  text-shadow: 1px 1px 3px #000;
+  z-index: 5;
+}
+
+#game {
+  display: block;
+}
+
+#endScreen {
+  display: none;
+  position: absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: linear-gradient(to bottom, #ffecd2, #fcb69f);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+#loveLetter {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+#marryBtn {
+  font-size: 28px;
+  padding: 15px 30px;
+  cursor: pointer;
+  border: none;
+  border-radius: 15px;
+  background: #ff6f91;
+  color: white;
+}
