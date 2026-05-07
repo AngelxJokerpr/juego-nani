@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>7 Meses de Amor</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>7 Meses - Juego de Amor</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Mensaje de amor arriba -->
-    <div class="message" id="levelMessage">¡Creé esto para ti porque te amo!</div>
+    <!-- Menú de inicio -->
+    <div id="startMenu">
+        <h1>Juego de Amor 💖</h1>
+        <p>Este juego es para ti, Jonayliz, porque te amo ❤️</p>
+        <button id="startBtn">Comenzar</button>
+    </div>
 
-    <!-- Canvas principal del juego -->
-    <canvas id="gameCanvas"></canvas>
+    <!-- Canvas del juego -->
+    <canvas id="gameCanvas" style="display:none;"></canvas>
 
-    <!-- Botón final para propuesta -->
-    <div id="proposal" style="display:none;">
-        <h1>¿Quieres casarte conmigo, Jonayliz?</h1>
-        <button onclick="alert('¡Ella dijo SÍ! 💖')">Sí</button>
-        <button onclick="alert('Todavía tenemos tiempo 😉')">No</button>
+    <!-- Carta final -->
+    <div id="finalCard" style="display:none;">
+        <div id="ringsContainer"></div>
+        <div id="loveLetter">
+            <h1>7 Meses Juntos 💖</h1>
+            <p>
+                Jonayliz, cada momento contigo ha sido un sueño hecho realidad. 
+                Desde aquel primer viaje a Disney, donde me pediste ser tu novio, 
+                hasta nuestro crucero y todos los recuerdos que hemos creado juntos. 
+                Eres mi alegría, mi paz y mi amor eterno. Quiero que sigamos creando 
+                más recuerdos mágicos y aventuras increíbles.
+            </p>
+            <button id="marryBtn">¿Quieres casarte conmigo? 💍</button>
+        </div>
     </div>
 
     <script src="app.js"></script>
