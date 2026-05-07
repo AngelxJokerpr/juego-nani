@@ -5,58 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>7 Meses de Amor 💖</title>
 <style>
-    body, html {margin:0; padding:0; overflow:hidden; font-family:sans-serif;}
-    #intro {
-        text-align:center;
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        flex-direction:column;
-        background: linear-gradient(to right, #f06, #f9c);
-        color:white;
-    }
-    #intro button {
-        padding:20px 50px;
-        font-size:24px;
-        border-radius:15px;
-        cursor:pointer;
-        background: #ff69b4;
-        border:none;
-        color:white;
-        transition: all 0.3s;
-    }
-    #intro button:hover {
-        transform: scale(1.1);
-        background:#ff1493;
-    }
-    canvas {display:block;}
-    #storyText {
-        position:absolute;
-        top:20px;
-        width:100%;
-        text-align:center;
-        color:white;
-        font-size:24px;
-        text-shadow:2px 2px 5px black;
-    }
-    #dialog {
-        position:absolute;
-        bottom:100px;
-        width:100%;
-        text-align:center;
-        color:yellow;
-        font-size:22px;
-        text-shadow:2px 2px 5px black;
-    }
+  body, html {margin:0; padding:0; overflow:hidden; font-family:sans-serif;}
+  #intro {
+    text-align:center;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background: linear-gradient(to right, #f06, #f9c);
+    color:white;
+  }
+  #intro button {
+    padding:20px 50px;
+    font-size:24px;
+    border-radius:15px;
+    cursor:pointer;
+    background: #ff69b4;
+    border:none;
+    color:white;
+    transition: all 0.3s;
+  }
+  #intro button:hover {transform: scale(1.1); background:#ff1493;}
+  canvas {display:block;}
+  #storyText {
+    position:absolute;
+    top:20px;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:24px;
+    text-shadow:2px 2px 5px black;
+  }
+  #dialog {
+    position:absolute;
+    bottom:100px;
+    width:100%;
+    text-align:center;
+    color:yellow;
+    font-size:22px;
+    text-shadow:2px 2px 5px black;
+  }
 </style>
 </head>
 <body>
 
 <div id="intro">
-    <h1>¡Feliz 7 meses, Jonayliz! 💖</h1>
-    <p>Creé esto para ti porque te amo ❤️</p>
-    <button onclick="start()">COMENZAR</button>
+  <h1>¡Feliz 7 meses, Jonayliz! 💖</h1>
+  <p>Creé esto para ti porque te amo ❤️</p>
+  <button id="startBtn" disabled>COMENZAR</button>
 </div>
 
 <canvas id="game"></canvas>
