@@ -49,20 +49,46 @@ function startGame(){
 }
 
 function createLevel(level){
-    player.x=100; player.y=canvas.height-150;
-    enemies=[];
-    npcs=[];
+    // Reiniciar player
+    player.x = 100; 
+    player.y = canvas.height - 150;
+    player.vx = 0;
+    player.vy = 0;
+    player.onGround = true;
 
-    // Crear enemigos móviles
-    for(let i=0;i<3;i++){
+    enemies = [];
+    npcs = [];
+
+    // Cada nivel tiene su fondo y enemigos diferentes
+    let enemyCount = 3; // número de enemigos por nivel
+
+    // Crear enemigos con movimiento aleatorio
+    for(let i=0; i<enemyCount; i++){
         enemies.push({
-            x:200+i*300,
-            y:canvas.height-150,
-            w:50,
-            h:50,
-            vx:2+Math.random()*2
+            x: 200 + i * 300,
+            y: canvas.height - 150,
+            w: 50,
+            h: 50,
+            vx: 2 + Math.random() * 2,
+            vy: 0
         });
     }
+
+    // NPC que habla (mensaje de amor único por nivel)
+    switch(level){
+        case 0: 
+            npcs.push({x:500, y:canvas.height-150, msg:`Jonayliz, aquí fue donde me pediste ser tu novio 💖`});
+            break;
+        case 1:
+            npcs.push({x:500, y:canvas.height-150, msg:`Recuerda nuestro crucero, fue tan mágico 🛳️✨`});
+            break;
+        case 2:
+            npcs.push({x:500, y:canvas.height-150, msg:`Nuestro próximo viaje a Disney, lleno de aventuras 🎢💕`});
+            break;
+        default:
+            break;
+    }
+}
 
     // Crear NPCs que hablan
     npcs.push({x:500, y:canvas.height-150, msg:`Jonayliz, te amo más que ayer, menos que mañana 💖`});
