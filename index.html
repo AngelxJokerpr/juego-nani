@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>7 Meses Juntos</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Amor</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Menú de inicio -->
-<div id="startMenu">
-    <h1>¡Feliz 7 meses! 💖</h1>
-    <p>Creé esto para ti porque te amo 💕</p>
+<!-- MENÚ INICIO -->
+<div id="startMenu" class="menu">
+    <h1>Creé esto para ti 💖</h1>
+    <p>Porque te amo, Jonayliz. Vamos a jugar nuestra historia.</p>
     <button id="startBtn">Comenzar</button>
 </div>
 
-<!-- Canvas del juego -->
+<!-- CANVAS DEL JUEGO -->
 <canvas id="gameCanvas"></canvas>
 
-<!-- Puzzle final -->
-<div id="puzzleScreen" style="display:none; flex-direction:column; align-items:center; justify-content:center;">
-    <h2>¡Traté de hacerte algo diferente! 💖</h2>
-    <p>Introduce el código para desbloquear tu sorpresa:</p>
-    <input type="text" id="puzzleCode" placeholder="Código secreto"/>
+<!-- PANTALLA DE PUZZLE -->
+<div id="puzzleScreen" class="menu">
+    <h2>¡Has terminado los niveles! 😍</h2>
+    <p>Ingresa el código para ver la sorpresa final:</p>
+    <input type="text" id="puzzleCode" placeholder="Código">
     <button id="submitCodeBtn">Enviar</button>
-    <p id="codeMessage" style="color:red;"></p>
+    <p id="codeMessage"></p>
 </div>
 
-<!-- Carta final -->
-<div id="finalCard" style="display:none; flex-direction:column; align-items:center;">
+<!-- CARTA FINAL -->
+<div id="finalCard" class="menu">
+    <div id="ringsContainer"></div>
     <h1>¡Feliz 7 meses, Jonayliz! 💖</h1>
-    <p>Traté de hacerte algo diferente, te amo más que ayer y menos que mañana ❤️</p>
-    <div id="ringsContainer" style="position:relative; width:100%; height:200px;"></div>
+    <p>Estos 7 meses han sido increíbles… [aquí tu mensaje largo de amor]</p>
     <button id="proposeBtn">¿Quieres casarte conmigo? 💍</button>
 </div>
 
