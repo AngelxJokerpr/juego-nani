@@ -5,39 +5,42 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // SPRITES
-let imgPlayer = new Image(); imgPlayer.src = "assets/player.png";
-let imgGF = new Image(); imgGF.src = "assets/girlfriend.png";
-let imgEnemy = new Image(); imgEnemy.src = "assets/enemy.png";
-let imgNPC = new Image(); imgNPC.src = "assets/npc.png";
-let backgrounds = ["assets/background1.png","assets/background2.png","assets/background3.png"];
+let imgPlayer = new Image();
+let imgGF = new Image();
+let imgEnemy = new Image();
+let imgNPC = new Image();
 
-// PLAYER
+// ESPERA QUE SE CARGUEN LOS ASSETS
+let assetsLoaded = 0;
+let totalAssets = 4;
+function checkAllLoaded(){
+  assetsLoaded++;
+  if(assetsLoaded === totalAssets){
+    document.getElementById("startBtn").disabled = false; // Habilita botón
+  }
+}
+
+imgPlayer.src = "assets/player.png"; imgPlayer.onload = checkAllLoaded;
+imgGF.src = "assets/girlfriend.png"; imgGF.onload = checkAllLoaded;
+imgEnemy.src = "assets/enemy.png"; imgEnemy.onload = checkAllLoaded;
+imgNPC.src = "assets/npc.png"; imgNPC.onload = checkAllLoaded;
+
+// VARIABLES JUEGO
 let player = {x:100, y:0, vy:0, jump:false, w:70, h:70, frame:0};
-
-// CONTROLES
 let right=false, left=false;
-document.addEventListener("keydown",(e)=>{
-  if(e.key==="ArrowRight") right=true;
-  if(e.key==="ArrowLeft") left=true;
-  if(e.key===" ") jump();
-});
-document.addEventListener("keyup",(e)=>{
-  if(e.key==="ArrowRight") right=false;
-  if(e.key==="ArrowLeft") left=false;
-});
-function jump(){if(!player.jump){player.vy=-16; player.jump=false;}}
-
-// NIVEL
 let level=0;
+let lives=3;
+let cameraX=0;
+
+// NIVELES
 let levels=[
-  {name:"Disney 💖", text:"💖 Disney: el día donde ella me pidió ser su novio", start:0, end:2000},
-  {name:"Crucero 🚢", text:"🚢 Crucero: entendí que quiero todo contigo", start:2000, end:4000},
-  {name:"Disney 2 ✨", text:"✨ Disney otra vez: nuestro futuro juntos", start:4000, end:6000}
+  {name:"Disney 💖", text:"Disney: el día donde ella me pidió ser su novio", start:0, end:2000},
+  {name:"Crucero 🚢", text:"Crucero: entendí que quiero todo contigo", start:2000, end:4000},
+  {name:"Disney 2 ✨", text:"Disney otra vez: nuestro futuro juntos", start:4000, end:6000}
 ];
 let ground = canvas.height-120;
-let lives=3;
 
-// NPCS
+// NPCS con mensajes románticos
 let npcs = [
   {x:300, text:"💖 Jonayliz es hermosa"},
   {x:900, text:"💖 Te amo más que ayer pero no más que mañana"},
@@ -57,31 +60,44 @@ let platforms=[
   {x:7200,y:ground-100,w:3000,h:20}
 ];
 
-// UI
-let storyText=document.getElementById("storyText");
-let dialog=document.getElementById("dialog");
+// FONDOS
+let backgrounds = [
+  {img: "assets/background1.png", x:0},
+  {img: "assets/background2.png", x:0},
+  {img: "assets/background3.png", x:0}
+];
 
-// START
-function start(){
-  document.getElementById("intro").style.display="none";
-  storyText.innerHTML = levels[level].text;
-  loop();
-}
+// CONTROLES
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="ArrowRight") right=true;
+  if(e.key==="ArrowLeft") left=true;
+  if(e.key===" ") jump();
+});
+document.addEventListener("keyup",(e)=>{
+  if(e.key==="ArrowRight") right=false;
+  if(e.key==="ArrowLeft") left=false;
+});
+function jump(){if(!player.jump){player.vy=-16; player.jump=false;}}
 
-// DIBUJOS
-function drawPlayer(p){
-  // Animación simple de caminar (cambia frame)
-  ctx.drawImage(imgPlayer,p.x,p.y,p.w,p.h);
-  p.frame+=0.1;
-  if(p.frame>3) p.frame=0;
-}
+// FUNCIONES DIBUJO
+function drawPlayer(p){ctx.drawImage(imgPlayer,p.x,p.y,p.w,p.h);}
 function drawEnemy(e){ctx.drawImage(imgEnemy,e.x,e.y,e.w,e.h);}
 function drawNPC(n){ctx.drawImage(imgNPC,n.x,ground-30,60,60);}
 function drawPlatform(p){ctx.fillStyle="#654321"; ctx.fillRect(p.x,p.y,p.w,p.h);}
 function drawBackground(){
-  let bg=new Image(); bg.src=backgrounds[level];
-  ctx.drawImage(bg,0,0,canvas.width,canvas.height);
+  backgrounds[level].x -=0.3; 
+  let bgImg=new Image(); bgImg.src=backgrounds[level].img;
+  ctx.drawImage(bgImg,backgrounds[level].x,0,canvas.width,canvas.height);
+  ctx.drawImage(bgImg,backgrounds[level].x+canvas.width,0,canvas.width,canvas.height);
 }
+
+// START
+function start(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("storyText").innerHTML = levels[level].text;
+  loop();
+}
+document.getElementById("startBtn").addEventListener("click", start);
 
 // GAME OVER
 function gameOver(){
@@ -103,18 +119,17 @@ function endGame(){
   </div>`;
 }
 
-// LOOP
-let cameraX=0;
+// LOOP PRINCIPAL
 function loop(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawBackground();
 
-  // movimiento jugador
+  // MOVIMIENTO JUGADOR
   if(right) player.x +=6;
   if(left) player.x -=6;
   player.vy +=0.9; player.y+=player.vy;
 
-  // colisión plataformas
+  // COLISION PLATAFORMAS
   player.jump=true;
   platforms.forEach(p=>{
     if(player.x+player.w>p.x && player.x<p.x+p.w && player.y+player.h>p.y && player.y+player.h<p.y+p.h+10 && player.vy>=0){
@@ -122,11 +137,11 @@ function loop(){
     }
   });
 
-  // cámara suave
+  // CAMARA
   cameraX += (player.x-cameraX-300)*0.08;
   ctx.save(); ctx.translate(-cameraX,0);
 
-  // enemigos
+  // ENEMIGOS
   enemies.forEach(e=>{
     e.x+=e.dir*2;
     if(e.x>cameraX+canvas.width) e.dir=-1;
@@ -140,26 +155,18 @@ function loop(){
     }
   });
 
-  // NPCs siempre visibles
+  // NPCS
   let currentDialog="";
   npcs.forEach(n=>{
     drawNPC(n);
     if(Math.abs(player.x-n.x)<200) currentDialog=n.text;
   });
-  dialog.innerHTML=currentDialog;
+  document.getElementById("dialog").innerHTML=currentDialog;
 
-  // jugador
+  // JUGADOR
   drawPlayer(player);
 
-  // final de nivel
+  // FINAL DE NIVEL
   if(player.x > levels[level].end){
     level++;
-    if(level >= levels.length){ endGame(); return; }
-    player.x = levels[level].start+100;
-    player.y = ground-50;
-    storyText.innerHTML = levels[level].text;
-  }
-
-  ctx.restore();
-  requestAnimationFrame(loop);
-}
+    if(level >= levels.length){ end
