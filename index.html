@@ -3,37 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>7 Meses de Amor</title>
-<link rel="stylesheet" href="style.css">
+<title>Juego Amor</title>
+<style>
+body,html{margin:0;padding:0;overflow:hidden;font-family:Arial;}
+#startMenu{position:absolute;top:0;left:0;width:100%;height:100%;background:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+#gameCanvas{display:none;background:#87CEEB;}
+button{padding:10px 20px;font-size:1.2em;}
+</style>
 </head>
 <body>
 
-<!-- MENÚ INICIAL -->
 <div id="startMenu">
-    <h1>Este juego lo creé para ti ❤️</h1>
-    <p>Porque te amo y quiero celebrar nuestros 7 meses juntos</p>
-    <button id="startBtn">Comenzar</button>
+  <h1>Este juego lo creé para ti ❤️</h1>
+  <button id="startBtn">Comenzar</button>
 </div>
 
-<!-- CANVAS -->
-<canvas id="gameCanvas" style="display:none;"></canvas>
-
-<!-- BOTONES MÓVILES -->
-<div id="mobileControls">
-    <button id="leftBtn">⬅️</button>
-    <button id="jumpBtn">⛅</button>
-    <button id="rightBtn">➡️</button>
-</div>
-
-<!-- CARTA FINAL -->
-<div id="finalCard" style="display:none;">
-    <div id="ringsContainer"></div>
-    <h2>Jonayliz, 7 meses juntos 💖</h2>
-    <p>Desde que me pediste ser tu novio en Disney, cada momento contigo ha sido mágico... 
-       Cada viaje, cada risa, cada abrazo... eres la mejor parte de mi vida. 
-       Te amo más que ayer y menos que mañana, siempre contigo.</p>
-    <button id="proposalBtn">¿Quieres casarte conmigo? 💍</button>
-</div>
+<canvas id="gameCanvas"></canvas>
 
 <script src="app.js"></script>
 </body>
