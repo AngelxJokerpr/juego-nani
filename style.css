@@ -3,7 +3,6 @@ body, html {
     padding: 0;
     overflow: hidden;
     font-family: Arial, sans-serif;
-    background-color: #000;
 }
 
 #startMenu {
@@ -19,25 +18,11 @@ body, html {
     text-align:center;
 }
 
-#startMenu h1 {font-size:2em; color:#fff;}
-#startMenu p {color:#fff; margin:10px 0;}
-#startMenu button {padding:15px 30px; font-size:1.2em; border:none; border-radius:10px; cursor:pointer;}
+#startMenu h1 { font-size:2em; color:#fff; }
+#startMenu p { color:#fff; margin:10px 0; }
+#startMenu button { padding:15px 30px; font-size:1.2em; border:none; border-radius:10px; cursor:pointer; }
 
-#mobileControls {
-    position:absolute;
-    bottom:20px;
-    left:50%;
-    transform: translateX(-50%);
-    display:flex;
-    gap:20px;
-}
-
-#mobileControls button {
-    width:60px; height:60px;
-    font-size:1.5em;
-    border:none; border-radius:50%;
-    background: rgba(255,255,255,0.7);
-}
+#gameCanvas { display:block; background:#87CEEB; }
 
 #finalCard {
     position:absolute;
@@ -53,23 +38,21 @@ body, html {
     overflow:auto;
 }
 
-#finalCard h2 {font-size:2em; color:#d4007f;}
-#finalCard p {font-size:1.2em; color:#000; margin:20px 0;}
-#finalCard button {
-    padding:15px 30px;
-    font-size:1.2em;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    background-color:gold;
-}
+#finalCard h2 { font-size:2em; color:#d4007f; }
+#finalCard p { font-size:1.2em; color:#000; margin:20px 0; }
+#finalCard button { padding:15px 30px; font-size:1.2em; border:none; border-radius:10px; cursor:pointer; background-color:gold; }
 
 #ringsContainer div {
     animation: floatRing 5s infinite ease-in-out;
+    width:50px;
+    height:50px;
+    border:5px solid gold;
+    border-radius:50%;
+    position:absolute;
 }
 
 @keyframes floatRing {
-    0% {transform: translateY(0);}
-    50% {transform: translateY(-50px);}
-    100% {transform: translateY(0);}
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-50px); }
+    100% { transform: translateY(0); }
 }
