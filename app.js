@@ -3,10 +3,8 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const startMenu = document.getElementById('startMenu');
 const startBtn = document.getElementById('startBtn');
-const finalCard = document.getElementById('finalCard');
-const ringsContainer = document.getElementById('ringsContainer');
+const startMenu = document.getElementById('startMenu');
 
 startBtn.addEventListener('click', () => {
     startMenu.style.display = 'none';
@@ -14,99 +12,78 @@ startBtn.addEventListener('click', () => {
     startGame();
 });
 
-// BOTONES MÓVILES
-const keys = {left:false, right:false, jump:false};
-document.getElementById('leftBtn').addEventListener('touchstart',()=>keys.left=true);
-document.getElementById('leftBtn').addEventListener('touchend',()=>keys.left=false);
-document.getElementById('rightBtn').addEventListener('touchstart',()=>keys.right=true);
-document.getElementById('rightBtn').addEventListener('touchend',()=>keys.right=false);
-document.getElementById('jumpBtn').addEventListener('touchstart',()=>keys.jump=true);
-document.getElementById('jumpBtn').addEventListener('touchend',()=>keys.jump=false);
+const player = {x:50,y:canvas.height-100,w:50,h:50,dx:0,dy:0,spd:5,gravity:0.7,jump:-15,onGround:false};
+const keys = {left:false,right:false,jump:false};
 
-// JUGADOR
-const player = {x:50,y:canvas.height-150,w:80,h:80,dx:0,dy:0,spd:7,gravity:0.7,jump:-18,onGround:false,sprite:'assets/player.png'};
+document.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowLeft') keys.left=true;
+    if(e.key==='ArrowRight') keys.right=true;
+    if(e.key==='ArrowUp') keys.jump=true;
+});
+document.addEventListener('keyup', (e)=>{
+    if(e.key==='ArrowLeft') keys.left=false;
+    if(e.key==='ArrowRight') keys.right=false;
+    if(e.key==='ArrowUp') keys.jump=false;
+});
 
-// NPCS
-const npcs=[
-    {x:400,y:canvas.height-150,w:80,h:80,messages:["Jonayliz, eres la luz de mi vida 💕","Te amo más que ayer, menos que mañana 🌸"],curMsg:0,timer:0,sprite:'assets/girlfriend.png'}
-];
+// MOVIMIENTO TÁCTIL (móvil)
+const createTouchControls=()=>{
+    const leftBtn=document.createElement('button');
+    leftBtn.innerText='⬅️'; document.body.appendChild(leftBtn);
+    leftBtn.style.position='absolute'; leftBtn.style.bottom='20px'; leftBtn.style.left='20px';
+    leftBtn.style.fontSize='2em';
+    leftBtn.addEventListener('touchstart',()=>keys.left=true);
+    leftBtn.addEventListener('touchend',()=>keys.left=false);
 
-// NIVELES
-const levels=[
-    {bg:'assets/background1.png',name:'Disney'},
-    {bg:'assets/background2.png',name:'Crucero'},
-    {bg:'assets/background3.png',name:'Disney2'}
-];
-let currentLevel = 0;
+    const rightBtn=document.createElement('button');
+    rightBtn.innerText='➡️'; document.body.appendChild(rightBtn);
+    rightBtn.style.position='absolute'; rightBtn.style.bottom='20px'; rightBtn.style.left='100px';
+    rightBtn.style.fontSize='2em';
+    rightBtn.addEventListener('touchstart',()=>keys.right=true);
+    rightBtn.addEventListener('touchend',()=>keys.right=false);
 
-// ENEMIGOS, PLATAFORMAS, COLECCIONABLES
-let enemies=[], platforms=[], collectibles=[];
-
-function resetLevel(){
-    player.x=50; player.y=canvas.height-150; player.dy=0; player.onGround=false;
-    createEnemies(currentLevel);
-    createPlatforms(currentLevel);
-    createCollectibles(currentLevel);
+    const jumpBtn=document.createElement('button');
+    jumpBtn.innerText='⛅'; document.body.appendChild(jumpBtn);
+    jumpBtn.style.position='absolute'; jumpBtn.style.bottom='20px'; jumpBtn.style.right='20px';
+    jumpBtn.style.fontSize='2em';
+    jumpBtn.addEventListener('touchstart',()=>keys.jump=true);
+    jumpBtn.addEventListener('touchend',()=>keys.jump=false);
 }
 
-function createEnemies(level){
-    enemies=[];
-    enemies.push({x:400,y:canvas.height-150,w:60,h:60,dx:3,dy:2,sprite:'assets/enemy.png'});
-    enemies.push({x:700,y:canvas.height-180,w:60,h:60,dx:-2,dy:1,sprite:'assets/enemy.png'});
-}
+createTouchControls();
 
-function createPlatforms(level){
-    platforms=[];
-    for(let i=0;i<5;i++){
-        platforms.push({x:100+i*200,y:canvas.height-100-Math.random()*150,w:150,h:20,dx:(Math.random()>0.5?2:-2)});
-    }
-}
-
-function createCollectibles(level){
-    collectibles=[];
-    for(let i=0;i<5;i++){
-        collectibles.push({x:200+Math.random()*800,y:canvas.height-200-Math.random()*150,w:40,h:40,collected:false});
-    }
-}
-
-function drawSprite(url,x,y,w,h){
-    const img = new Image();
-    img.src=url;
-    ctx.drawImage(img,x,y,w,h);
-}
-
-// ANILLOS FINALES
-function animateRings(){
-    for(let i=0;i<5;i++){
-        const ring=document.createElement('div');
-        ring.style.width="50px";
-        ring.style.height="50px";
-        ring.style.border="5px solid gold";
-        ring.style.borderRadius="50%";
-        ring.style.position="absolute";
-        ring.style.left=Math.random()*window.innerWidth+"px";
-        ring.style.top=Math.random()*window.innerHeight+"px";
-        ring.style.animation="floatRing 5s infinite";
-        ringsContainer.appendChild(ring);
-    }
-}
-
-// GAME LOOP
-let lastTime=0;
 function startGame(){
-    resetLevel();
     requestAnimationFrame(gameLoop);
 }
 
-function gameLoop(timestamp){
-    const deltaTime = timestamp-lastTime;
-    lastTime = timestamp;
+function gameLoop(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     // FONDO
-    drawSprite(levels[currentLevel].bg,0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#87CEEB';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    // PLATAFORMAS
-    platforms.forEach(p=>{
-        p.x += p.dx;
-        if(p.x<0 || p.x+p.w>canvas.width
+    // PLATAFORMA SUELO
+    ctx.fillStyle='#654321';
+    ctx.fillRect(0,canvas.height-50,canvas.width,50);
+
+    // MOVIMIENTO PLAYER
+    if(keys.left) player.x -= player.spd;
+    if(keys.right) player.x += player.spd;
+    if(keys.jump && player.onGround){player.dy=player.jump; player.onGround=false;}
+
+    player.dy += player.gravity;
+    player.y += player.dy;
+
+    if(player.y + player.h >= canvas.height-50){
+        player.y = canvas.height-50 - player.h;
+        player.dy =0;
+        player.onGround = true;
+    }
+
+    // DIBUJAR PLAYER
+    ctx.fillStyle='red';
+    ctx.fillRect(player.x,player.y,player.w,player.h);
+
+    requestAnimationFrame(gameLoop);
+}
