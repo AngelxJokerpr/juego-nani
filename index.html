@@ -1,33 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>7 Meses de Amor 💖</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 Meses de Amor</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Pantalla de inicio -->
-  <div id="intro">
-    <h1>Creé esto para ti porque te amo 💖</h1>
-    <p>¡Vamos a revivir nuestros viajes y momentos juntos!</p>
-    <button id="startBtn">COMENZAR</button>
-  </div>
+    <!-- Mensaje de amor arriba -->
+    <div class="message" id="levelMessage">¡Creé esto para ti porque te amo!</div>
 
-  <!-- Mensaje de historia -->
-  <div id="storyText"></div>
+    <!-- Canvas principal del juego -->
+    <canvas id="gameCanvas"></canvas>
 
-  <!-- Canvas del juego -->
-  <canvas id="game"></canvas>
+    <!-- Botón final para propuesta -->
+    <div id="proposal" style="display:none;">
+        <h1>¿Quieres casarte conmigo, Jonayliz?</h1>
+        <button onclick="alert('¡Ella dijo SÍ! 💖')">Sí</button>
+        <button onclick="alert('Todavía tenemos tiempo 😉')">No</button>
+    </div>
 
-  <!-- Mensaje de NPC -->
-  <div id="dialog"></div>
-
-  <!-- Pantalla final -->
-  <div id="endScreen">
-    <div id="loveLetter"></div>
-    <button id="marryBtn">¿Quieres casarte conmigo? 💍</button>
-  </div>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
