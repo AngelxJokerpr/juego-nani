@@ -200,4 +200,16 @@ function gameLoop(timestamp){
     // --- PASAR NIVEL ---
     if(player.x>canvas.width-100){
         currentLevel++;
-        if(currentLevel>=
+        if(currentLevel>= levels.length){
+            // FIN DEL JUEGO: mostrar carta de amor
+            canvas.style.display = 'none';
+            document.getElementById('finalCard').style.display = 'flex';
+            animateRings();
+            return; // se detiene el loop del juego
+        } else {
+            resetLevel();
+        }
+    }
+
+    requestAnimationFrame(gameLoop);
+}
