@@ -24,7 +24,7 @@ let enemies = [];
 let npcs = [];
 let keys = {};
 
-// Fondos
+// Fondos por nivel
 const backgrounds = ['assets/background1.png','assets/background2.png','assets/background3.png'];
 
 // NPC y player
@@ -48,8 +48,8 @@ function startGame(){
     requestAnimationFrame(gameLoop);
 }
 
+// Crear cada nivel
 function createLevel(level){
-    // Reiniciar player
     player.x = 100; 
     player.y = canvas.height - 150;
     player.vx = 0;
@@ -59,8 +59,8 @@ function createLevel(level){
     enemies = [];
     npcs = [];
 
-    // Cada nivel tiene su fondo y enemigos diferentes
-    let enemyCount = 3; // número de enemigos por nivel
+    // Número de enemigos por nivel
+    let enemyCount = 3;
 
     // Crear enemigos con movimiento aleatorio
     for(let i=0; i<enemyCount; i++){
@@ -69,12 +69,11 @@ function createLevel(level){
             y: canvas.height - 150,
             w: 50,
             h: 50,
-            vx: 2 + Math.random() * 2,
-            vy: 0
+            vx: 2 + Math.random() * 2
         });
     }
 
-    // NPC que habla (mensaje de amor único por nivel)
+    // NPC con mensaje de amor por nivel
     switch(level){
         case 0: 
             npcs.push({x:500, y:canvas.height-150, msg:`Jonayliz, aquí fue donde me pediste ser tu novio 💖`});
@@ -90,12 +89,9 @@ function createLevel(level){
     }
 }
 
-    // Crear NPCs que hablan
-    npcs.push({x:500, y:canvas.height-150, msg:`Jonayliz, te amo más que ayer, menos que mañana 💖`});
-}
-
+// Actualizar jugador
 function updatePlayer(){
-    if(!player.onGround) player.vy +=0.5;
+    if(!player.onGround) player.vy +=0.5; // gravedad
     player.y += player.vy;
     player.x += player.vx;
 
@@ -105,18 +101,20 @@ function updatePlayer(){
         player.onGround = true;
     } else { player.onGround=false;}
 
-    if(keys['ArrowRight']) player.vx=5;
-    else if(keys['ArrowLeft']) player.vx=-5;
+    if(keys['ArrowRight'] || keys['d']) player.vx=5;
+    else if(keys['ArrowLeft'] || keys['a']) player.vx=-5;
     else player.vx=0;
 
-    if(keys[' '] && player.onGround) player.vy=-12;
+    if((keys[' '] || keys['w'] || keys['ArrowUp']) && player.onGround) player.vy=-12;
 }
 
+// Actualizar enemigos
 function updateEnemies(){
     enemies.forEach(e=>{
         e.x += e.vx;
         if(e.x<0 || e.x+e.w>canvas.width) e.vx*=-1;
 
+        // Colisión con jugador
         if(player.x<e.x+e.w && player.x+player.w>e.x &&
            player.y<e.y+e.h && player.y+player.h>e.y){
                alert("¡Un enemigo te atrapó! Reiniciando nivel.");
@@ -125,10 +123,12 @@ function updateEnemies(){
     });
 }
 
+// Dibujar todo
 function drawLevel(){
     let bg = new Image(); bg.src = backgrounds[currentLevel];
     ctx.drawImage(bg,0,0,canvas.width,canvas.height);
 
+    // NPCs
     npcs.forEach(n=>{
         ctx.drawImage(girlfriendImg,n.x,n.y,50,50);
         ctx.fillStyle='white';
@@ -136,13 +136,16 @@ function drawLevel(){
         ctx.fillText(n.msg,n.x-20,n.y-10);
     });
 
+    // Enemigos
     enemies.forEach(e=>{
         ctx.drawImage(enemyImg,e.x,e.y,e.w,e.h);
     });
 
+    // Jugador
     ctx.drawImage(playerImg,player.x,player.y,player.w,player.h);
 }
 
+// Pasar de nivel o puzzle
 function nextLevelOrPuzzle(){
     currentLevel++;
     if(currentLevel>=backgrounds.length){
@@ -153,20 +156,22 @@ function nextLevelOrPuzzle(){
     }
 }
 
+// Loop principal
 function gameLoop(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     updatePlayer();
     updateEnemies();
     drawLevel();
 
-    if(player.x>canvas.width-100){
+    // Si jugador llega al final de nivel
+    if(player.x > canvas.width-100){
         nextLevelOrPuzzle();
     } else {
         requestAnimationFrame(gameLoop);
     }
 }
 
-// Puzzle final
+// Mostrar puzzle final
 function showPuzzleScreen(){
     canvas.style.display='none';
     puzzleScreen.style.display='flex';
@@ -174,6 +179,7 @@ function showPuzzleScreen(){
     codeMessage.textContent = '';
 }
 
+// Validar puzzle
 submitCodeBtn.addEventListener('click', ()=>{
     if(puzzleCodeInput.value.trim()==='071605'){
         puzzleScreen.style.display='none';
