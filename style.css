@@ -1,83 +1,56 @@
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  overflow: hidden;
-  background: #fdf6e3;
+/* Pantalla completa y sin scroll */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ffe4e1;
+    font-family: 'Arial', sans-serif;
 }
 
-#intro {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
+/* Canvas */
+#gameCanvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background-color: #a0e7e5;
 }
 
-#startBtn {
-  padding: 20px 40px;
-  font-size: 24px;
-  cursor: pointer;
-  margin-top: 20px;
-  border: none;
-  border-radius: 15px;
-  background: #ff6f91;
-  color: white;
+/* Mensaje de amor */
+.message {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 4vw;
+    color: #ff69b4;
+    text-shadow: 1px 1px 2px #000;
+    z-index: 10;
 }
 
-#storyText {
-  position: absolute;
-  top: 10px;
-  width: 100%;
-  text-align: center;
-  font-size: 24px;
-  color: #fff;
-  text-shadow: 2px 2px 5px #000;
-  z-index: 5;
+/* Propuesta final */
+#proposal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: #fff0f5;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 3px solid #ff69b4;
 }
-
-#dialog {
-  position: absolute;
-  bottom: 100px;
-  width: 100%;
-  text-align: center;
-  font-size: 20px;
-  color: yellow;
-  text-shadow: 1px 1px 3px #000;
-  z-index: 5;
+#proposal button {
+    font-size: 1.5rem;
+    margin: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #ffb6c1;
+    color: #fff;
 }
-
-#game {
-  display: block;
-}
-
-#endScreen {
-  display: none;
-  position: absolute;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: linear-gradient(to bottom, #ffecd2, #fcb69f);
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-}
-
-#loveLetter {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
-}
-#marryBtn {
-  font-size: 28px;
-  padding: 15px 30px;
-  cursor: pointer;
-  border: none;
-  border-radius: 15px;
-  background: #ff6f91;
-  color: white;
+#proposal button:hover {
+    background-color: #ff69b4;
 }
