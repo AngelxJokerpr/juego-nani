@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// === ASSETS ===
+// === ASSETS PLACEHOLDER ===
 const assets = {};
 const assetList = [
   {name:"player", src:"assets/player.png"},
@@ -16,19 +16,15 @@ const assetList = [
   {name:"bg3", src:"assets/background3.png"}
 ];
 
-let loadedAssets = 0;
 assetList.forEach(a=>{
   assets[a.name] = new Image();
   assets[a.name].src = a.src;
-  assets[a.name].onload = ()=>{
-    loadedAssets++;
-    if(loadedAssets===assetList.length){
-      document.getElementById("startBtn").disabled = false;
-    }
+  assets[a.name].onerror = ()=>{
+    console.warn(`⚠️ Imagen no encontrada: ${a.src}`);
   };
 });
 
-// === VARIABLES JUEGO ===
+// === VARIABLES ===
 let player = {x:100,y:0,w:70,h:70,vy:0,jump:false};
 let level=0;
 let cameraX=0;
@@ -41,7 +37,6 @@ const levels = [
   {name:"Disney 2 ✨", text:"Disney otra vez: nuestro futuro juntos", start:4000, end:6000}
 ];
 
-// NPCs y Enemigos
 const npcs = [
   {x:300,text:"💖 Jonayliz es hermosa"},
   {x:900,text:"💖 Te amo más que ayer pero no más que mañana"},
@@ -69,16 +64,30 @@ document.addEventListener("keyup",e=>{
   if(e.key==="ArrowLeft") left=false;
 });
 
-function jump(){if(!player.jump){player.vy=-16; player.jump=true;}}
+function jump(){if(!player.jump){player.vy=-16; player.jump=false;}}
 
 // === DIBUJO ===
 function drawPlayer(){
-  ctx.drawImage(assets.player,player.x,player.y,player.w,player.h);
+  if(assets.player.complete) ctx.drawImage(assets.player,player.x,player.y,player.w,player.h);
+  else { ctx.fillStyle="blue"; ctx.fillRect(player.x,player.y,player.w,player.h); }
 }
-function drawEnemy(e){ctx.drawImage(assets.enemy,e.x,e.y,e.w,e.h);}
-function drawNPC(n){ctx.drawImage(assets.npc,n.x,ground-30,60,60);}
+function drawEnemy(e){
+  if(assets.enemy.complete) ctx.drawImage(assets.enemy,e.x,e.y,e.w,e.h);
+  else { ctx.fillStyle="red"; ctx.fillRect(e.x,e.y,e.w,e.h); }
+}
+function drawNPC(n){
+  if(assets.npc.complete) ctx.drawImage(assets.npc,n.x,ground-30,60,60);
+  else { ctx.fillStyle="pink"; ctx.fillRect(n.x,ground-30,60,60); }
+}
 function drawPlatform(p){ctx.fillStyle="#654321"; ctx.fillRect(p.x,p.y,p.w,p.h);}
-function drawBackground(){ctx.drawImage(assets["bg"+(level+1)],0,0,canvas.width,canvas.height);}
+function drawBackground(){
+  if(assets["bg"+(level+1)] && assets["bg"+(level+1)].complete){
+    ctx.drawImage(assets["bg"+(level+1)],0,0,canvas.width,canvas.height);
+  } else {
+    ctx.fillStyle="#aaddff";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+}
 
 // === GAME LOOP ===
 function loop(){
@@ -91,7 +100,7 @@ function loop(){
   player.vy+=0.9;
   player.y+=player.vy;
 
-  // Colisión con plataformas
+  // Plataformas
   player.jump=true;
   platforms.forEach(p=>{
     if(player.x+player.w>p.x && player.x<p.x+p.w && player.y+player.h>p.y && player.y+player.h<p.y+p.h+10 && player.vy>=0){
@@ -101,74 +110,15 @@ function loop(){
     }
   });
 
-  // Cámara suave
+  // Cámara
   cameraX+=(player.x-cameraX-300)*0.08;
   ctx.save(); ctx.translate(-cameraX,0);
 
-  // Enemigos animados
+  // Enemigos
   enemies.forEach(e=>{
     e.x+=e.dir*e.speed;
     if(e.x>cameraX+canvas.width) e.dir=-1;
     if(e.x<cameraX) e.dir=1;
     drawEnemy(e);
 
-    // Colisión
-    if(player.x<e.x+e.w && player.x+player.w>e.x && player.y<e.y+e.h && player.y+player.h>e.y){
-      lives--;
-      player.x = levels[level].start+100;
-      player.y = ground-50;
-      if(lives<=0) gameOver();
-    }
-  });
-
-  // NPCs con mensajes
-  let currentDialog="";
-  npcs.forEach(n=>{
-    drawNPC(n);
-    if(Math.abs(player.x-n.x)<200) currentDialog=n.text;
-  });
-  document.getElementById("dialog").innerHTML=currentDialog;
-
-  drawPlayer();
-  ctx.restore();
-
-  // Mensaje largo arriba
-  document.getElementById("storyText").innerHTML = levels[level].text;
-
-  // Avanzar nivel
-  if(player.x>levels[level].end){
-    level++;
-    if(level>=levels.length){ endGame(); return; }
-    player.x=levels[level].start+100;
-  }
-
-  requestAnimationFrame(loop);
-}
-
-// === GAME OVER ===
-function gameOver(){
-  alert("Oh no 😢. Reiniciando nivel...");
-  player.x = levels[level].start+100;
-  player.y = ground-50;
-  lives=3;
-}
-
-// === END GAME ===
-function endGame(){
-  document.getElementById("endScreen").style.display="flex";
-  document.getElementById("loveLetter").innerHTML=
-  `💌 Te amo infinitamente 💌<br>
-   Estos 7 meses han sido un viaje increíble juntos.<br>
-   Desde Disney, donde me pediste ser tu novio, hasta el crucero y todos nuestros recuerdos.<br>
-   Jonayliz, eres mi todo y quiero que nuestro amor siga creciendo siempre.<br>
-   Gracias por ser mi compañera de vida y aventuras.`;
-  document.getElementById("marryBtn").onclick = ()=>{
-    alert("¡Ella dijo que sí! 💍❤️");
-  };
-}
-
-// === START BUTTON ===
-document.getElementById("startBtn").onclick = ()=>{
-  document.getElementById("intro").style.display="none";
-  loop();
-};
+    if(player.x<e.x+e.w && player.x+player.w>e.x && player.y<e.y
