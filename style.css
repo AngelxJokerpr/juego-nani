@@ -19,6 +19,10 @@ body, html {
     padding:20px;
 }
 
+#finalScene {
+    display:none; /* oculto al inicio */
+}
+
 #gameCanvas {
     display:none;
     width:100%;
@@ -52,4 +56,5 @@ button:hover {
     text-align: center;
     text-shadow: 2px 2px 4px black;
     z-index: 5;
+    display:none; /* oculto al inicio */
 }
