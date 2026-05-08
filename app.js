@@ -14,7 +14,6 @@ const proposeBtn = document.getElementById('proposeBtn');
 
 const sceneMessageDiv = document.getElementById('sceneMessage');
 
-// Escenas
 const scenes = [
     {
         background: 'assets/background1.png',
@@ -31,6 +30,7 @@ const scenes = [
 ];
 
 let currentScene = 0;
+let gameStarted = false;
 
 // Player
 const player = {
@@ -38,58 +38,62 @@ const player = {
     y: canvas.height - 150,
     width: 80,
     height: 120,
-    speed: 12,
+    speed: 10,
     img: new Image()
 };
 player.img.src = 'assets/player.png';
 
 let bgImg = new Image();
-bgImg.src = scenes[currentScene].background;
 
-// Comenzar
+// COMENZAR
 startBtn.onclick = () => {
     if(startCode.value === "071605"){
         startMenu.style.display='none';
         canvas.style.display='block';
-        drawScene();
+        sceneMessageDiv.style.display='block';
+        gameStarted = true;
+        requestAnimationFrame(gameLoop);
     } else {
         codeMessage.textContent = "Código incorrecto 😢";
     }
 };
 
-// Dibujar escena
+// DIBUJAR ESCENA
 function drawScene(){
     bgImg.src = scenes[currentScene].background;
-    bgImg.onload = () => {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.drawImage(bgImg,0,0,canvas.width,canvas.height);
-        ctx.drawImage(player.img, player.x, player.y, player.width, player.height);
-
-        // Mostrar mensaje en div
-        sceneMessageDiv.textContent = scenes[currentScene].message;
-    };
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(bgImg,0,0,canvas.width,canvas.height);
+    ctx.drawImage(player.img, player.x, player.y, player.width, player.height);
+    sceneMessageDiv.textContent = scenes[currentScene].message;
 }
 
-// Mover jugador
+// LOOP
+function gameLoop(){
+    if(!gameStarted) return;
+    drawScene();
+    requestAnimationFrame(gameLoop);
+}
+
+// MOVER JUGADOR
 function movePlayer(){
+    if(!gameStarted) return;
+
     player.x += player.speed;
+
     if(player.x + player.width >= canvas.width){
         currentScene++;
         if(currentScene < scenes.length){
             player.x = 50;
-            drawScene();
         } else {
             canvas.style.display='none';
             sceneMessageDiv.style.display='none';
             finalScene.style.display='flex';
             finalMessage.textContent = "Estos 7 meses juntos han sido los más hermosos de mi vida, Jonayliz. Cada día contigo es un regalo, y quiero pasar todas mis aventuras futuras a tu lado. 💖";
         }
-    } else {
-        drawScene();
     }
 }
 
-// Eventos para PC y móvil
+// EVENTOS
 window.addEventListener('keydown', (e)=>{
     if(e.key === "ArrowRight"){
         movePlayer();
@@ -98,7 +102,7 @@ window.addEventListener('keydown', (e)=>{
 canvas.addEventListener('touchstart', movePlayer);
 canvas.addEventListener('click', movePlayer);
 
-// Botón propuesta
+// PROPUESTA
 proposeBtn.onclick = ()=>{
     alert("¡Jonayliz! 💖 Te amo infinitamente y quiero pasar toda mi vida contigo. ¡Sí, quiero casarme contigo! 💍");
 };
