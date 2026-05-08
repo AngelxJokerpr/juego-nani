@@ -4,11 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>7 Meses de Amor Interactivo</title>
-<link rel="stylesheet" href="style.css">
+<style>
+body, html {
+    margin:0; padding:0;
+    width:100%; height:100%;
+    overflow:hidden;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffe6f2;
+}
+.menu {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    z-index:10;
+    text-align:center;
+    padding:20px;
+}
+#finalScene, #sceneMessage, #gameCanvas {
+    display:none;
+}
+#gameCanvas {
+    width:100%; height:100%;
+}
+button {
+    padding:15px 30px;
+    font-size:18px;
+    margin-top:20px;
+    cursor:pointer;
+    border:none;
+    border-radius:10px;
+    background-color:#ff66b3;
+    color:white;
+    transition:0.3s;
+}
+button:hover { background-color:#ff3399; }
+.message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    color: white;
+    font-size: 22px;
+    text-align: center;
+    text-shadow: 2px 2px 4px black;
+}
+</style>
 </head>
 <body>
 
-<!-- Pantalla de inicio -->
 <div id="startMenu" class="menu">
     <h1>Creé esto para ti 💖</h1>
     <p>Ingresa el código para empezar nuestra historia:</p>
@@ -17,13 +65,9 @@
     <p id="codeMessage" style="color:red;"></p>
 </div>
 
-<!-- Mensaje de escena -->
 <div id="sceneMessage" class="message"></div>
-
-<!-- Canvas del juego -->
 <canvas id="gameCanvas"></canvas>
 
-<!-- Pantalla final -->
 <div id="finalScene" class="menu">
     <h1>¡Feliz 7 meses, Jonayliz! 💖</h1>
     <p id="finalMessage"></p>
