@@ -3,211 +3,118 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Menú de inicio
 const startMenu = document.getElementById('startMenu');
 const startBtn = document.getElementById('startBtn');
-
-// Puzzle y carta final
-const puzzleScreen = document.getElementById('puzzleScreen');
-const puzzleCodeInput = document.getElementById('puzzleCode');
-const submitCodeBtn = document.getElementById('submitCodeBtn');
+const startCode = document.getElementById('startCode');
 const codeMessage = document.getElementById('codeMessage');
 
-const finalCard = document.getElementById('finalCard');
-const ringsContainer = document.getElementById('ringsContainer');
+const finalScene = document.getElementById('finalScene');
+const finalMessage = document.getElementById('finalMessage');
 const proposeBtn = document.getElementById('proposeBtn');
 
-// Variables del juego
-let currentLevel = 0;
-let player = { x:100, y:canvas.height-150, w:50, h:50, vx:0, vy:0, onGround:true };
-let enemies = [];
-let npcs = [];
-let keys = {};
+// Escenas
+const scenes = [
+    {
+        background: 'assets/background1.png',
+        message: "Recuerdo el primer viaje a Disney, Jonayliz, donde con tu sonrisa más hermosa me pediste ser tu novio. Cada segundo a tu lado fue un sueño, entre risas, abrazos y aventuras. Gracias por regalarme tu amor, tu paciencia y tu alegría. Este momento siempre será mi favorito de estos 7 meses juntos."
+    },
+    {
+        background: 'assets/background2.png',
+        message: "Nuestro crucero fue mágico, lleno de paisajes increíbles y momentos que jamás olvidaré. Cada atardecer contigo parecía una pintura y tus risas eran la melodía perfecta. Gracias por ser mi compañera de viaje, de vida y de corazón. Estos 7 meses me han enseñado lo hermoso que es amar y ser amado por ti, Jonayliz."
+    },
+    {
+        background: 'assets/background3.png',
+        message: "Nuestro segundo viaje a Disney está lleno de ilusión y emoción. Cada juego, cada paseo y cada abrazo a tu lado se convierten en recuerdos eternos. Jonayliz, cada día contigo me hace más feliz, y quiero seguir celebrando cada momento, cada aventura y cada sonrisa a tu lado. ¡Te amo infinitamente!"
+    }
+];
 
-// Fondos por nivel
-const backgrounds = ['assets/background1.png','assets/background2.png','assets/background3.png'];
+let currentScene = 0;
 
-// NPC y player
-let playerImg = new Image(); playerImg.src = 'assets/player.png';
-let girlfriendImg = new Image(); girlfriendImg.src = 'assets/girlfriend.png';
-let enemyImg = new Image(); enemyImg.src = 'assets/enemy1.png';
+// Player
+const player = {
+    x: 50,
+    y: canvas.height - 150,
+    width: 80,
+    height: 120,
+    speed: 12,
+    img: new Image()
+};
+player.img.src = 'assets/player.png';
 
-// Eventos teclado
-window.addEventListener('keydown', e => keys[e.key] = true);
-window.addEventListener('keyup', e => keys[e.key] = false);
+let bgImg = new Image();
+bgImg.src = scenes[currentScene].background;
 
-// INICIO DEL JUEGO
-startBtn.onclick = ()=>{
-    startMenu.style.display='none';
-    startGame();
+// Comenzar
+startBtn.onclick = () => {
+    if(startCode.value === "071605"){
+        startMenu.style.display='none';
+        canvas.style.display='block';
+        drawScene();
+    } else {
+        codeMessage.textContent = "Código incorrecto 😢";
+    }
 };
 
-// FUNCIONES DEL JUEGO
-function startGame(){
-    createLevel(currentLevel);
-    requestAnimationFrame(gameLoop);
+// Dibujar escena
+function drawScene(){
+    bgImg.src = scenes[currentScene].background;
+    bgImg.onload = () => {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(bgImg,0,0,canvas.width,canvas.height);
+        ctx.drawImage(player.img, player.x, player.y, player.width, player.height);
+        ctx.fillStyle = "white";
+        ctx.font = "26px Arial";
+        wrapText(ctx, scenes[currentScene].message, 30, 50, canvas.width - 60, 32);
+    };
 }
 
-// Crear cada nivel
-function createLevel(level){
-    player.x = 100; 
-    player.y = canvas.height - 150;
-    player.vx = 0;
-    player.vy = 0;
-    player.onGround = true;
-
-    enemies = [];
-    npcs = [];
-
-    // Número de enemigos por nivel
-    let enemyCount = 3;
-
-    // Crear enemigos con movimiento aleatorio
-    for(let i=0; i<enemyCount; i++){
-        enemies.push({
-            x: 200 + i * 300,
-            y: canvas.height - 150,
-            w: 50,
-            h: 50,
-            vx: 2 + Math.random() * 2
-        });
+// Función para texto largo en canvas
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    let words = text.split(' ');
+    let line = '';
+    for(let n = 0; n < words.length; n++) {
+        let testLine = line + words[n] + ' ';
+        let metrics = context.measureText(testLine);
+        if(metrics.width > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+        } else {
+            line = testLine;
+        }
     }
-
-    // NPC con mensaje de amor por nivel
-    switch(level){
-        case 0: 
-            npcs.push({x:500, y:canvas.height-150, msg:`Jonayliz, aquí fue donde me pediste ser tu novio 💖`});
-            break;
-        case 1:
-            npcs.push({x:500, y:canvas.height-150, msg:`Recuerda nuestro crucero, fue tan mágico 🛳️✨`});
-            break;
-        case 2:
-            npcs.push({x:500, y:canvas.height-150, msg:`Nuestro próximo viaje a Disney, lleno de aventuras 🎢💕`});
-            break;
-        default:
-            break;
-    }
+    context.fillText(line, x, y);
 }
 
-// Actualizar jugador
-function updatePlayer(){
-    if(!player.onGround) player.vy +=0.5; // gravedad
-    player.y += player.vy;
-    player.x += player.vx;
-
-    if(player.y + player.h >= canvas.height-50){ 
-        player.y = canvas.height-50 - player.h;
-        player.vy =0;
-        player.onGround = true;
-    } else { player.onGround=false;}
-
-    if(keys['ArrowRight'] || keys['d']) player.vx=5;
-    else if(keys['ArrowLeft'] || keys['a']) player.vx=-5;
-    else player.vx=0;
-
-    if((keys[' '] || keys['w'] || keys['ArrowUp']) && player.onGround) player.vy=-12;
-}
-
-// Actualizar enemigos
-function updateEnemies(){
-    enemies.forEach(e=>{
-        e.x += e.vx;
-        if(e.x<0 || e.x+e.w>canvas.width) e.vx*=-1;
-
-        // Colisión con jugador
-        if(player.x<e.x+e.w && player.x+player.w>e.x &&
-           player.y<e.y+e.h && player.y+player.h>e.y){
-               alert("¡Un enemigo te atrapó! Reiniciando nivel.");
-               createLevel(currentLevel);
-           }
-    });
-}
-
-// Dibujar todo
-function drawLevel(){
-    let bg = new Image(); bg.src = backgrounds[currentLevel];
-    ctx.drawImage(bg,0,0,canvas.width,canvas.height);
-
-    // NPCs
-    npcs.forEach(n=>{
-        ctx.drawImage(girlfriendImg,n.x,n.y,50,50);
-        ctx.fillStyle='white';
-        ctx.font='20px Arial';
-        ctx.fillText(n.msg,n.x-20,n.y-10);
-    });
-
-    // Enemigos
-    enemies.forEach(e=>{
-        ctx.drawImage(enemyImg,e.x,e.y,e.w,e.h);
-    });
-
-    // Jugador
-    ctx.drawImage(playerImg,player.x,player.y,player.w,player.h);
-}
-
-// Pasar de nivel o puzzle
-function nextLevelOrPuzzle(){
-    currentLevel++;
-    if(currentLevel>=backgrounds.length){
-        showPuzzleScreen();
+// Mover jugador
+function movePlayer(){
+    player.x += player.speed;
+    if(player.x + player.width >= canvas.width){
+        currentScene++;
+        if(currentScene < scenes.length){
+            player.x = 50;
+            drawScene();
+        } else {
+            canvas.style.display='none';
+            finalScene.style.display='flex';
+            finalMessage.textContent = "Estos 7 meses juntos han sido los más hermosos de mi vida, Jonayliz. Cada día contigo es un regalo, y quiero pasar todas mis aventuras futuras a tu lado. 💖";
+        }
     } else {
-        createLevel(currentLevel);
-        requestAnimationFrame(gameLoop);
+        drawScene();
     }
 }
 
-// Loop principal
-function gameLoop(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    updatePlayer();
-    updateEnemies();
-    drawLevel();
-
-    // Si jugador llega al final de nivel
-    if(player.x > canvas.width-100){
-        nextLevelOrPuzzle();
-    } else {
-        requestAnimationFrame(gameLoop);
-    }
-}
-
-// Mostrar puzzle final
-function showPuzzleScreen(){
-    canvas.style.display='none';
-    puzzleScreen.style.display='flex';
-    puzzleCodeInput.value = '';
-    codeMessage.textContent = '';
-}
-
-// Validar puzzle
-submitCodeBtn.addEventListener('click', ()=>{
-    if(puzzleCodeInput.value.trim()==='071605'){
-        puzzleScreen.style.display='none';
-        showFinalCard();
-    } else {
-        codeMessage.textContent = 'Código incorrecto, intenta de nuevo ❤️';
+// Eventos para PC y móvil
+window.addEventListener('keydown', (e)=>{
+    if(e.key === "ArrowRight"){
+        movePlayer();
     }
 });
 
-// Carta final con anillos animados
-function showFinalCard(){
-    finalCard.style.display='flex';
-    ringsContainer.innerHTML = '';
-    for(let i=0;i<6;i++){
-        const ring = document.createElement('div');
-        ring.style.width = '40px';
-        ring.style.height = '40px';
-        ring.style.border = '5px solid gold';
-        ring.style.borderRadius = '50%';
-        ring.style.position = 'absolute';
-        ring.style.left = Math.random()*window.innerWidth + 'px';
-        ring.style.top = Math.random()*200 + 'px';
-        ring.style.animation = 'float 4s infinite alternate';
-        ringsContainer.appendChild(ring);
-    }
-}
+canvas.addEventListener('touchstart', movePlayer);
+canvas.addEventListener('click', movePlayer);
 
-// Botón de propuesta final
-proposeBtn.addEventListener('click', ()=>{
-    alert('¡Te amo, Jonayliz! 💖 Gracias por estos 7 meses increíbles. ¿Aceptas seguir viviendo aventuras juntos? 🌟');
-});
+// Botón propuesta
+proposeBtn.onclick = ()=>{
+    alert("¡Jonayliz! 💖 Te amo infinitamente y quiero pasar toda mi vida contigo. ¡Sí, quiero casarme contigo! 💍");
+};
