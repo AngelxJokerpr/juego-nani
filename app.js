@@ -32,7 +32,6 @@ const scenes = [
 let currentScene = 0;
 let gameStarted = false;
 
-// Player
 const player = {
     x: 50,
     y: canvas.height - 150,
@@ -45,7 +44,7 @@ player.img.src = 'assets/player.png';
 
 let bgImg = new Image();
 
-// COMENZAR
+// Iniciar juego solo si código correcto
 startBtn.onclick = () => {
     if(startCode.value === "071605"){
         startMenu.style.display='none';
@@ -58,7 +57,6 @@ startBtn.onclick = () => {
     }
 };
 
-// DIBUJAR ESCENA
 function drawScene(){
     bgImg.src = scenes[currentScene].background;
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -67,19 +65,15 @@ function drawScene(){
     sceneMessageDiv.textContent = scenes[currentScene].message;
 }
 
-// LOOP
 function gameLoop(){
     if(!gameStarted) return;
     drawScene();
     requestAnimationFrame(gameLoop);
 }
 
-// MOVER JUGADOR
 function movePlayer(){
     if(!gameStarted) return;
-
     player.x += player.speed;
-
     if(player.x + player.width >= canvas.width){
         currentScene++;
         if(currentScene < scenes.length){
@@ -93,7 +87,7 @@ function movePlayer(){
     }
 }
 
-// EVENTOS
+// Eventos para teclado y móvil
 window.addEventListener('keydown', (e)=>{
     if(e.key === "ArrowRight"){
         movePlayer();
@@ -102,7 +96,6 @@ window.addEventListener('keydown', (e)=>{
 canvas.addEventListener('touchstart', movePlayer);
 canvas.addEventListener('click', movePlayer);
 
-// PROPUESTA
 proposeBtn.onclick = ()=>{
     alert("¡Jonayliz! 💖 Te amo infinitamente y quiero pasar toda mi vida contigo. ¡Sí, quiero casarme contigo! 💍");
 };
